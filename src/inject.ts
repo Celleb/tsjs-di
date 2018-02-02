@@ -28,7 +28,7 @@ export function newClass(target: Constructor): Constructor {
             if (params) {
                 for (let i in params) {
                     if (args[i] !== undefined) {
-                        return;
+                        continue;
                     }
                     const type = params[i].name;
                     const dependency = DI.inject(type);

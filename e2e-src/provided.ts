@@ -11,7 +11,9 @@ import { Car } from './providers';
 
 @Inject()
 export class CarEmitter {
-    constructor(private car: Car) {
+    car: Car;
+    constructor(car: Car) {
+        this.car = car;
     }
 
     emit() {

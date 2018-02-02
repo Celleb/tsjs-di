@@ -17,32 +17,42 @@ import { Injector, DI, Inject } from '../dist';
 import { Car, Engine, config } from './providers';
 import { CarEmitter } from './provided';
 
+DI.clear();
 DI.register([
     { provide: Engine, useFactory: Engine.create },
     Car,
+    { provide: CarEmitter, useClass: CarEmitter },
     { provide: 'Config', useValue: config },
-    CarEmitter
 ]);
-
 
 class App {
     @Inject()
     emitter: CarEmitter;
 
     constructor() {
-
     }
 }
 
 const app = new App();
 
-describe('tsjs-di', function () {
+describe('tsjs-di e2e', function () {
     it('passes the e2e test', function () {
         const expected = {
             name: 'Tesla',
             capacity: 5.5
         };
         expect(app.emitter.emit()).to.eql(expected);
+    });
+    it('injects the dependencies', function () {
+        const app2 = new CarEmitter(undefined);
+        const expected = {
+            name: 'Tesla',
+            capacity: 5.5
+        };
+        expect(app2.emit()).to.eql(expected);
+    });
+    after(function () {
+        DI.clear();
     });
 });
 

@@ -10,19 +10,6 @@
 
 import { Provider, Inject } from '../dist';
 
-@Inject()
-export class Car {
-    private _name: string;
-    constructor(public engine: Engine) {
-        this._name = 'Tesla';
-    }
-
-    get name() {
-        return this._name;
-    }
-
-}
-
 @Provider({ multi: true })
 export class Engine {
     private capacity: number;
@@ -38,6 +25,21 @@ export class Engine {
         return new Engine(5.5);
     }
 }
+
+
+@Inject()
+export class Car {
+    private _name: string;
+    constructor(public engine: Engine) {
+        this._name = 'Tesla';
+    }
+
+    get name() {
+        return this._name;
+    }
+
+}
+
 
 export const config = {
     name: 'tsjs-di',
