@@ -1,0 +1,51 @@
+{
+  "name": "tsjs-di",
+  "version": "1.0.0",
+  "description": "Typescript (decorator/annotation) and javascript dependency injector",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/Celleb/tsjs-di.git",
+  "author": "Jonas Tomanga",
+  "license": "MIT",
+  "scripts": {
+    "build": "gulp watch",
+    "test": "nyc mocha"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.10"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.10",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.5.2",
+    "@types/reflect-metadata": "^0.0.5",
+    "@types/sinon": "^4.1.2",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "debug": "^3.1.0",
+    "gulp": "^3.9.1",
+    "gulp-flatten": "^0.3.1",
+    "gulp-mocha": "^4.3.1",
+    "gulp-typescript": "^3.2.3",
+    "gulp-util": "^3.0.8",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0",
+    "sinon": "^4.1.3",
+    "source-map-support": "^0.5.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
+  },
+  "nyc": {
+    "extension": [
+      "src/**/*.ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "src/**/*.spec.ts",
+      "test/**",
+      "*.js"
+    ],
+    "all": true
+  }
+}
