@@ -1,4 +1,4 @@
-import { Constructor } from '../';
+import { Constructor } from './constructor';
 
 export interface BaseProvider {
     provide: Constructor | string;
@@ -6,16 +6,15 @@ export interface BaseProvider {
 }
 
 export interface ClassProvider extends BaseProvider {
-    useClass: Constructor;
+    useClass?: Constructor;
 }
 
 export interface FactoryProvider extends BaseProvider {
-    useFactory: (...args: any[]) => any;
+    useFactory?: (...args: any[]) => any;
 }
 
 export interface ValueProvider extends BaseProvider {
-    provide: string;
-    useValue: any;
+    useValue?: any;
 }
 
-export type Providers = ClassProvider | ValueProvider | FactoryProvider;
+export type Providers = any;

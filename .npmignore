@@ -40,4 +40,6 @@ Thumbs.db
 # convertion folders
 /src
 /test
+/e2e
+/e2e-src
 src/playground.spec.ts

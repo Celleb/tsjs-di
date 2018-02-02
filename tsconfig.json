@@ -4,6 +4,7 @@
         "target": "es6",
         "module": "CommonJS",
         "outDir": "dist",
+        "declarationDir": "dist",
         "sourceMap": true,
         "removeComments": true,
         "declaration": true,

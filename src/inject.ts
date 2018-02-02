@@ -1,4 +1,4 @@
-import { Constructor } from '../';
+import { Constructor } from './constructor';
 import { DI } from './';
 
 import 'reflect-metadata';

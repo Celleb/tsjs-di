@@ -14,10 +14,10 @@ export class Injector {
 
     /**
      * Registers a provider
-     * @param {Constructor | Provider } providers - A Class or a provider object
+     * @param providers - A Class or a provider object
      * @throws {TypeError} - Throws TypeError for invalid providers.
      */
-    register<T extends Constructor, K extends Providers>(providers: T | K | T[] | K[]): void {
+    register(providers: Providers): void {
         if (Array.isArray(providers)) {
             return this.registerMultiple(providers);
         }
@@ -139,7 +139,7 @@ export class Injector {
 
     /**
      * Gets the dependency
-     * @param {string|Constructor} key - A string or Class that identifies the dependency.
+     * @param key - A string or Class that identifies the dependency.
      * @throws {ReferenceError}
      */
     get(key: string | Constructor): any {
@@ -152,7 +152,7 @@ export class Injector {
 
     /**
      * Injects a provider or dependency
-     * @param {string|Constructor} key - A string or Class that identifies the dependency.
+     * @param key - A string or Class that identifies the dependency.
      * @throws {ReferenceError}
      */
     inject(key: string | Constructor): any {
@@ -164,6 +164,7 @@ export class Injector {
         }
         throw new ReferenceError('Dependency `' + name + '` does not exist.');
     }
+
     /**
      * Removes all registered providers
      */

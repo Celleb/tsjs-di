@@ -1,14 +1,20 @@
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const mocha = require('gulp-mocha');
-const gutil = require('gulp-util');
+const logger = require('fancy-log');
 const flatten = require('gulp-flatten');
+const merge = require('merge2');
 
 const tsProject = ts.createProject('tsconfig.json');
 
+
 gulp.task('scripts', () => {
     const tsResults = tsProject.src().pipe(tsProject());
-    return tsResults.js.pipe(gulp.dest('dist'));
+    return merge([
+        tsResults.js.pipe(gulp.dest('dist')),
+        tsResults.dts.pipe(gulp.dest('dist')),
+        gulp.src('src/**/*.d.ts').pipe(gulp.dest('dist'))
+    ]);
 });
 
 gulp.task('tests', () => {
@@ -33,11 +39,9 @@ gulp.task('watch', ['scripts'], () => {
 });
 
 gulp.task('mocha', function () {
-    return gulp.src(['test/**/*.js'], { read: false })
-        .pipe(mocha({
-            reporter: 'spec'
-        }))
-        .on('error', gutil.log);
+    return gulp.src(['test/**/*.js'], { read: false }).pipe(mocha({
+        reporter: 'spec'
+    })).on('error', logger.error);
 });
 
 gulp.task('watch-mocha', function () {
