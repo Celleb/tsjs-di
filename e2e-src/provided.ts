@@ -16,6 +16,14 @@ export class CarEmitter {
         this.car = car;
     }
 
+    get engine() {
+        return this.car.engine;
+    }
+
+    set capacity(value) {
+        this.car.engine.cap = value;
+    }
+
     emit() {
         return {
             name: this.car.name,

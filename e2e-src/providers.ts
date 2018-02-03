@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import { Provider, Inject } from '../dist';
+import { Provider, Inject, Injector } from '../dist';
 
 @Provider({ multi: true })
 export class Engine {
@@ -21,11 +21,14 @@ export class Engine {
         return this.capacity;
     }
 
+    set cap(value) {
+        this.capacity = value;
+    }
+
     static create(): Engine {
         return new Engine(5.5);
     }
 }
-
 
 @Inject()
 export class Car {
@@ -38,10 +41,19 @@ export class Car {
         return this._name;
     }
 
+    set name(value) {
+        this._name = value;
+    }
+
 }
 
 
-export const config = {
+export class Config {
+    name: string;
+    author: string;
+}
+
+export const config: Config = {
     name: 'tsjs-di',
     author: 'Jonas Tomanga'
 };
