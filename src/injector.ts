@@ -71,7 +71,7 @@ export class Injector {
      */
     private registerSingleton(provider: any, name?: string): void {
         name = name ? name : provider.prototype.constructor.name;
-        this.singletons[name] = this.factory(provider);
+        this.singletons[name] = null;
         this.factories[name] = this.factory.bind(this, provider);
         return;
     }
@@ -98,11 +98,9 @@ export class Injector {
     }
 
     private useValue(provider: ValueProvider): any {
-        if (typeof provider.provide !== 'string') {
-            throw new TypeError('`provide` must be a string when providing a value.');
-        }
+        const name = this.getName(provider);
         return provider.multi ? this.registerMultiInstance(name, this.factory.bind(this, provider.useValue))
-            : this.registerSingleton(provider.useValue, provider.provide);
+            : this.registerSingleton(provider.useValue, name);
     }
 
     private useFactory(provider: FactoryProvider): any {
@@ -157,6 +155,9 @@ export class Injector {
      */
     inject(key: string | Constructor): any {
         const name = this.getKey(key);
+        if (this.singletons[name] === null && this.factories.hasOwnProperty(name)) {
+            this.singletons[name] = this.get(name);
+        }
         if (this.singletons.hasOwnProperty(name)) {
             return this.singletons[name];
         } else if (this.factories.hasOwnProperty(name)) {

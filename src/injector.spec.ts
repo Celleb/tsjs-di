@@ -40,7 +40,7 @@ describe('Injector', function () {
         it('should register a singleton injectable when provided with a class', function () {
             injector.register(Car);
             expect(injector.singletons).to.have.ownProperty('Car');
-            expect(injector.singletons.Car).to.be.an.instanceOf(Car);
+            expect(injector.singletons.Car).to.be.eql(null);
             expect(injector.factories).to.have.ownProperty('Car');
             expect(injector.factories.Car).to.be.a('function');
         });
@@ -52,19 +52,19 @@ describe('Injector', function () {
         it('should register a provider given a provider object with useClass', function () {
             injector.register({ provide: Car, useClass: Engine });
             expect(injector.singletons).to.have.ownProperty('Car');
-            expect(injector.singletons.Car).to.be.an.instanceOf(Engine);
+            expect(injector.singletons.Car).to.eql(null);
         });
         it('should register a provider given a provider object with useClass and provide string', function () {
             injector.register({ provide: 'Engine', useClass: Car });
             expect(injector.singletons).to.have.ownProperty('Engine');
-            expect(injector.singletons.Engine).to.be.an.instanceOf(Car);
+            expect(injector.singletons.Engine).to.eql(null);
         });
         it('should register multiple providers given an array of provider objects', function () {
             injector.register([{ provide: 'Engine', useClass: Car }, { provide: Car, useClass: Engine }]);
             expect(injector.singletons).to.have.ownProperty('Engine');
-            expect(injector.singletons.Engine).to.be.an.instanceOf(Car);
+            expect(injector.singletons.Engine).to.eql(null);
             expect(injector.singletons).to.haveOwnProperty('Car');
-            expect(injector.singletons.Car).to.be.an.instanceOf(Engine);
+            expect(injector.singletons.Car).to.be.eql(null);
         });
         it('should register a provider given a provider object with useValue', function () {
             const value = {
@@ -73,17 +73,8 @@ describe('Injector', function () {
             };
             injector.register({ provide: 'Config', useValue: value });
             expect(injector.singletons).to.haveOwnProperty('Config');
-            expect(injector.singletons.Config).to.eql(value);
+            expect(injector.factories.Config()).to.eql(value);
 
-        });
-        it('should thrown an exception when using a useValue provider with a not string provide value.', function () {
-            const value = {
-                foo: 'bar',
-                bar: 'foo'
-            };
-            expect(() => {
-                injector.register({ provide: Car, useValue: value });
-            }).to.throw(TypeError, '`provide` must be a string when providing a value.');
         });
         it('should throw an error if provided with an invalid factory', function () {
             expect(() => injector.register('factory')).to.throw(TypeError);
