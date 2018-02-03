@@ -23,7 +23,7 @@ export class Injector {
         }
 
         if (typeof providers === 'object' && providers.provide) {
-            if (!(typeof (<Providers>providers).provide === 'string' || this.isConstructor(providers))) {
+            if ((typeof (<Providers>providers).provide !== 'string' && !this.isConstructor(providers))) {
                 throw new TypeError('`Provider.provide` must be a string or a Class');
             }
             if ((<ClassProvider>providers).useClass) {
@@ -48,6 +48,9 @@ export class Injector {
      * @returns {boolean}
      */
     private isConstructor(provider: any): boolean {
+        if (provider.provide === null) {
+            console.log(provider);
+        }
         if (provider.provide) {
             return !!(typeof provider.provide === 'function' && provider.provide.prototype && provider.provide.prototype.constructor);
         }
@@ -77,7 +80,7 @@ export class Injector {
     }
 
     private registerSingletonFactory(factory: (...args: any[]) => any, name: string): void {
-        this.singletons[name] = factory(this);
+        this.singletons[name] = null;
         this.factories[name] = factory;
         return;
     }
