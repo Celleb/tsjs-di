@@ -113,6 +113,7 @@ describe('Injector', function () {
             expect(injector.singletons).to.not.haveOwnProperty('Car');
             expect(injector.factories).to.haveOwnProperty('Car');
             expect(injector.factories.Car).to.be.a('function');
+            Reflect.deleteMetadata('multi', Car);
         });
 
         it('should throw an exception given a provider object with useFactory and an invalid factory', function () {
@@ -128,10 +129,12 @@ describe('Injector', function () {
                 injector = new Injector();
             });
         });
+
         it('should return the provider when `inject` is called with a class parameter', function () {
             injector.register(Car);
             expect(injector.inject(Car)).to.be.an.instanceof(Car);
         });
+
         it('should return a value provider when requested for one', function () {
             const value = {
                 foo: 'bar',
@@ -140,14 +143,18 @@ describe('Injector', function () {
             injector.register({ provide: 'Config', useValue: value });
             expect(injector.inject('Config')).to.eql(value);
         });
+
         it('should return the provider when `inject` is called with a string parameter', function () {
             injector.register(Car);
             expect(injector.inject('Car')).to.be.an.instanceof(Car);
         });
+
         it('should call the factory and return the provider when requesting a multi instance provider with a factory.', function () {
+
             let factory = sinon.spy(function () {
                 return new Car();
             });
+
             injector.register({ provide: Car, useFactory: factory, multi: true });
             const car = injector.inject('Car');
             const car2 = injector.inject('Car');
@@ -157,10 +164,25 @@ describe('Injector', function () {
             expect(car).to.not.eql(car2);
             expect(factory.called).to.be.ok;
         });
+
+        it('should inject a multi instance provided specified by the provider decorator.', function () {
+            Reflect.defineMetadata('multi', true, Car);
+            injector.register(Car);
+            const car = injector.inject('Car');
+            const car2 = injector.inject('Car');
+            expect(car).to.be.an.instanceof(Car);
+            expect(car2).to.be.an.instanceOf(Car);
+            car.options = 4;
+            expect(car).to.not.eql(car2);
+        });
+
         it('should return a ReferenceError for unregistered injectables', function () {
             expect(() => {
                 injector.inject('engine');
             }).to.throw(ReferenceError, 'Dependency `engine` does not exist.');
+        });
+        afterEach(function () {
+            Reflect.deleteMetadata('multi', Car);
         });
     });
 
@@ -172,6 +194,7 @@ describe('Injector', function () {
             });
         });
         it('should return the provider when `get` is called with a class parameter', function () {
+            console.log(Reflect.getOwnMetadata('multi', Car));
             injector.register(Car);
             expect(injector.get(Car)).to.be.an.instanceof(Car);
         });

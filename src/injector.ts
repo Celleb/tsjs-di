@@ -36,7 +36,9 @@ export class Injector {
         }
 
         if (this.isConstructor(providers)) {
-            return this.registerSingleton(providers);
+            return this.isMulti(providers) ?
+                this.registerMultiInstance(providers.prototype.constructor.name, this.factory.bind(this, providers))
+                : this.registerSingleton(providers);
         }
 
         throw new TypeError('Invalid provider(s)');
@@ -48,9 +50,6 @@ export class Injector {
      * @returns {boolean}
      */
     private isConstructor(provider: any): boolean {
-        if (provider.provide === null) {
-            console.log(provider);
-        }
         if (provider.provide) {
             return !!(typeof provider.provide === 'function' && provider.provide.prototype && provider.provide.prototype.constructor);
         }
@@ -111,11 +110,14 @@ export class Injector {
             throw new TypeError('Invalid factory, a factory must be a function.');
         }
         const name = this.getName(provider);
-        return provider.multi ? this.registerMultiInstance(name, provider.useFactory)
+        return provider.multi || this.isMulti(provider.provide as Constructor) ? this.registerMultiInstance(name, provider.useFactory)
             : this.registerSingletonFactory(provider.useFactory, name);
     }
 
     private isMulti(provider: Constructor): boolean {
+        if (!this.isConstructor(provider)) {
+            return false;
+        }
         return !!Reflect.getOwnMetadata('multi', provider);
     }
 
