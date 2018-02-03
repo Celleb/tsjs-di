@@ -58,6 +58,10 @@ gulp.task('watch-e2e', () => {
     gulp.watch(['e2e/**/*.js'], ['e2e']);
 });
 
+gulp.task('watch-e2ejs', () => {
+    gulp.watch(['e2e/**/*.js'], ['e2ejs']);
+});
+
 gulp.task('mocha', function () {
     return gulp.src(['test/**/*.js'], { read: false }).pipe(mocha({
         reporter: 'spec'
@@ -66,6 +70,12 @@ gulp.task('mocha', function () {
 
 gulp.task('e2e', function () {
     return gulp.src(['e2e/index.js'], { read: false }).pipe(mocha({
+        reporter: 'spec'
+    })).on('error', logger.error);
+});
+
+gulp.task('e2ejs', function () {
+    return gulp.src(['e2e/e2e-js.js'], { read: false }).pipe(mocha({
         reporter: 'spec'
     })).on('error', logger.error);
 });
