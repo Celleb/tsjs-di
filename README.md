@@ -31,7 +31,7 @@ export class ProviderA {
 ```
 
 Providers will be injected as singletons into all dependants,
-to inject multi instance a provider must be decorated with `@Provider({multi: true})`.
+to inject multi instance a provider must be decorated with `@Provider({multi: true})` or registered with the multi option set to true.
 
 A Provider can also have its dependencies injected if it is decorated with `@Provider()` or `Inject()`.
 
@@ -52,7 +52,7 @@ export class ProviderB {
 
 #### Creating dependants
 
-A dependent class must be marked with `@Inject()` decorator to have its dependencies injected.
+A dependant class must be marked with `@Inject()` decorator to have its dependencies injected.
 
 `./dependantA.ts`
 ```typescript
@@ -176,6 +176,7 @@ class Dependant {
         this.provider = provider;
     }
 }
+// register the provider
 DI.register(Provider);
 
 const dep = new Dependant();
@@ -236,3 +237,47 @@ DI.register([{
 const provider = DI.inject('FactoryProvider');
 provide.log('Hello, world!');
 ```
+
+## API
+
+### .register(providers)
+
+Adds dependency providers to the DI, it takes a class, a provider object or an array of classes and provider object.
+
+#### provider object
+
+The provider object must have:
+
+- `provide`: A string or a Class of the provider
+
+and any of the following:
+
+- `useClass`: The class to be used to satisfy the dependency, can be different from the one provided.
+- `useFactory`: A function to be used to create or instantiate the provider.
+- `useValue`: The value to be used to satisfy the dependency, it can be of any type.
+- `multi`: A boolean that indicates if the provider should be multi instance or not.
+
+Throws a `TypeError` if called with an invalid provider
+
+### .inject(type)
+
+Returns a registered provider that matches the specified type. Returns the same instance unless the dependency was registered with the multi option.
+`type` can be a string or Class from which the provider can be identified.
+
+Throws a `ReferenceError` if the provider is not registered.
+
+### .get(type)
+
+Returns a new instance of a registered provider that matches the specified type.
+`type` can be a string or Class from which the provider can be identified.
+
+Throws a `ReferenceError` if the provider is not registered.
+
+### .exist(type)
+
+Returns true if the specified provider exists, else returns false.
+`type` can be a string or Class from which the provider can be identified.
+
+### .clear()
+
+Removes all providers

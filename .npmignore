@@ -38,8 +38,6 @@ Thumbs.db
 .nyc_output/
 
 # convertion folders
-/src
 /test
 /e2e
-/e2e-src
 src/playground.spec.ts
