@@ -2,6 +2,14 @@
   "name": "tsjs-di",
   "version": "1.0.0",
   "description": "Typescript (decorator/annotation) and javascript dependency injector",
+  "keywords": [
+    "dependency",
+    "inject",
+    "injector",
+    "typescript",
+    "javascript",
+    "decorator"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/Celleb/tsjs-di.git",
